@@ -1,24 +1,4 @@
-QEMU=~/qemu
-
 set -e #stop on error
-
-echo "############################################################################"
-echo \#Compile init.c:
-arm-none-eabi-as -mcpu=cortex-m4 -g startup.s -o startup.o
-
-#apt-get install gcc-arm-none-eabi
-
-echo \#Assemble the startup.s file:
-arm-none-eabi-gcc -c -mcpu=cortex-m4 -mthumb -g init.c -o init.o
-
-echo \#Link the object files into an ELF file:
-arm-none-eabi-ld -T linker.ld init.o startup.o -o output.elf
-
-echo \#Objcopy:
-arm-none-eabi-objcopy -O binary output.elf output.bin
-
-echo \#Run Qemu:
-echo "############################################################################"
 
 #Output 6 UARTs to 6 locations
 qemu-system-arm -M netduino2 -nographic -kernel output.bin -serial unix:///tmp/uart1,server -serial unix:///tmp/uart2,server -serial unix:///tmp/uart3,server -serial unix:///tmp/uart4,server -serial unix:///tmp/uart5,server -serial unix:///tmp/uart6,server
